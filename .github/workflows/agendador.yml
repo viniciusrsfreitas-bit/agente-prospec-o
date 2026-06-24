@@ -2,9 +2,9 @@ name: Esteira Diaria de Prospeccao Foco Fiscal
 
 on:
   schedule:
-    # Configurado para rodar de segunda a sexta-feira às 11:00 UTC (08:00 no Horário de Brasília)
-    - cron: '0 11 * * 1-5'
-  workflow_dispatch: # Permite que você clique em um botão no GitHub para testar o robô na hora se quiser
+    # Configurado para rodar às 10:15 UTC (07:15 no Horário de Brasília) para evitar filas
+    - cron: '15 10 * * 1-6'
+  workflow_dispatch: # Permite disparar manualmente pelo botão
 
 jobs:
   executar-esteira:
@@ -23,6 +23,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pandas google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client openai requests python-dotenv
+
+      - name: Recriar arquivo de credenciais do Google
+        run: |
+          echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' > credentials.json
 
       - name: Rodar a Esteira Multi-Agentes
         env:
